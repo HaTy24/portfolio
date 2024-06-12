@@ -40,11 +40,17 @@ jobs:
       - name: Zip project
         run: zip -r ${{secrets.APP_NAME}}.zip build public package.json yarn.lock version.txt
 
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan ${{ secrets.HOST }} >> ~/.ssh/known_hosts
+
       - name: Deploy to Server
         env:
           HOST: ${{ secrets.HOST }}
           USERNAME: ${{ secrets.USERNAME }}
-          PASSWORD: ${{ secrets.PASSWORD }}
         run: |
-          scp -r ./${{ secrets.APP_NAME }}.zip ${{ secrets.USERNAME }}@${{ secrets.HOST }}:/projects/archived
-          ssh ${{ secrets.USERNAME }}@${{ secrets.HOST }} 'sh projects/deploy.sh ${{ secrets.APP_NAME }}'  # Adjust according to your deployment process
+          scp -i ~/.ssh/id_rsa -r ./${{ secrets.APP_NAME }}.zip ${{ secrets.USERNAME }}@${{ secrets.HOST }}:/projects/archived
+          ssh -i ~/.ssh/id_rsa ${{ secrets.USERNAME }}@${{ secrets.HOST }} 'sh projects/deploy.sh ${{ secrets.APP_NAME }}'  # Adjust according to your deployment process
