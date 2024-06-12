@@ -37,11 +37,14 @@ jobs:
       - name: Build project
         run: npm run build
 
+      - name: Zip project
+        run: zip -r ${{secrets.APP_NAME}}.zip build public package.json yarn.lock version.txt
+
       - name: Deploy to Server
         env:
           HOST: ${{ secrets.HOST }}
           USERNAME: ${{ secrets.USERNAME }}
           PASSWORD: ${{ secrets.PASSWORD }}
         run: |
-          scp -r ./dist ${{ secrets.USERNAME }}@${{ secrets.HOST }}:/projects
-          ssh ${{ secrets.USERNAME }}@${{ secrets.HOST }} 'pm2 restart all'  # Adjust according to your deployment process
+          scp -r ./${{ secrets.APP_NAME }}.zip ${{ secrets.USERNAME }}@${{ secrets.HOST }}:/projects/archived
+          ssh ${{ secrets.USERNAME }}@${{ secrets.HOST }} 'sh projects/deploy.sh ${{ secrets.APP_NAME }}'  # Adjust according to your deployment process
