@@ -12,9 +12,13 @@ function Home() {
           <span>HÀ THIỆN TỶ</span>
         </div>
         <div className="des">
-          I’m a passionate developer who takes quality over quantity. I love to
-          research new technologies by reading blogs to have better technical
-          decisions. My goal is to become a tech lead in the next 3 years.
+          I’m a passionate Full-stack developer with 2 years experience,
+          primarily focusing on Back-end development. Enthusiastic about
+          crafting exceptional web solutions, I have extensive experience with
+          real-world projects and enjoy collaborating with others. Committed to
+          delivering high-quality results, I continuously improve my skills in a
+          dynamic tech environment. I’m adaptable, creative, and driven to
+          contribute effectively to challenging projects.
         </div>
         <div
           style={{
